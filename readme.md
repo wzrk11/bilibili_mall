@@ -36,7 +36,7 @@
 - **macOS & Linux**：运行 `Installation of Dependency Libraries.sh` 安装相关依赖库
   - 若您位于中国大陆且相关依赖库的下载速度较慢，可尝试通过 `pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple/` 指令更换下载源
 
-### 3. 填写 Bilibili Cookie 信息
+### 3. 配置 Bilibili Cookie 信息
 
 - 请在 `BilibiliMall-Crawler_main.py` 内找到以下代码，于引号内填写 Bilibili Cookie 信息即可
 
