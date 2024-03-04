@@ -68,25 +68,23 @@ def crawler():
             "cookie": f'{Bilibili_Cookie}',
             "origin": "https://mall.bilibili.com",
             "referer": "https://mall.bilibili.com/neul-next/index.html?page=magic-market_index",
-            "sec-ch-ua": "'Not_A Brand';v='8', 'Chromium';v='121', 'Microsoft Edge';v='121'",
+            "sec-ch-ua": "'Not_A Brand';v='8', 'Chromium';v='122', 'Microsoft Edge';v='122'",
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": "'Windows'",
             "sec-fetch-dest": "empty",
             "sec-fetch-mode": "cors",
             "sec-fetch-site": "same-origin",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0"
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36 Edg/122.0.0.0"
         }
 
         try:
             response = requests.request("POST", mall_url, headers = headers, data = payload)
             print(response.text)
             response = response.json()
+            data = response["data"]["data"]  # 提取一页内的商品信息
             nextId = response["data"]["nextId"]  # 提取进入下一页所需的密钥
 
-            if nextId is None:
-                break
-
-            for item in response["data"]["data"]:
+            for item in data:
                 c2cItemsId = item["c2cItemsId"]
                 c2cItemsName = item["c2cItemsName"]
                 showPrice = item["showPrice"]
@@ -103,6 +101,9 @@ def crawler():
                 })
                 item_count += 1
                 retry_count = 0
+
+            if nextId is None:
+                break
 
         except (TypeError, KeyError) as e:
             try:
@@ -176,6 +177,11 @@ def crawler():
 
     information_values_output(3)
     output_dir = filedialog.askdirectory()
+
+    if not os.path.isdir(output_dir):
+        print(f'{Fore.CYAN}[INFO] 商品信息的保存被取消!{Style.RESET_ALL}')
+        return
+
     current_time = datetime.now().strftime("%Y-%m-%d_%H时%M分%S秒")
     file_name = f'{current_time}_{min_price}-{max_price}元_{int(min_discount) // 10}-{int(max_discount) // 10}折{category_entry_real}.xlsx'
     output_file = os.path.normpath(os.path.join(output_dir, file_name))
@@ -221,7 +227,7 @@ def crawler():
     worksheet.set_column("F:F", 10, col_format)
 
     writer.close()
-    print(f'{Fore.CYAN}[INFO] 商品信息已保存至 {output_file}{Style.RESET_ALL}') if output_dir else print(f'{Fore.CYAN}[INFO] 商品信息的保存被取消!{Style.RESET_ALL}')
+    print(f'{Fore.CYAN}[INFO] 商品信息已保存至 {output_file}{Style.RESET_ALL}')
     pass
 
 def extract_minutes_seconds(interval_time):
