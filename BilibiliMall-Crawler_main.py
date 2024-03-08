@@ -152,7 +152,7 @@ def crawler():
         except requests.exceptions.JSONDecodeError:
             try:
                 print(f'{Fore.MAGENTA}{"-" * 70}{Style.RESET_ALL}')
-                print(f'{Fore.RED}[Error JSONDecode] 检测到账号已被风控! 请更换 IP 后重试...{Style.RESET_ALL}')
+                print(f'{Fore.RED}[Error 412] 检测到账号已被风控! 请更换 IP 后重试...{Style.RESET_ALL}')
                 print(f'{Fore.YELLOW}[WARN] 从现在起, 爬取器每暂停 60 秒都将重试, 连续失败 5 次后认定爬取失败, 程序自动退出{Style.RESET_ALL}') if retry_count == 0 else ""
                 information_values_output(1)
                 print(f'{Fore.MAGENTA}{"-" * 70}{Style.RESET_ALL}')
@@ -248,8 +248,8 @@ def information_values_output(tag):
     if tag == 0 and item_count != 0:  # Default 输出
         print(f'{Fore.CYAN}[INFO] 当前为第 {pause_count} 次暂停, 已爬取 {item_count} 件商品, 爬取进度 {progress * 100:.2f} %{Style.RESET_ALL}')
         print(f'{Fore.GREEN}[INFO] 程序已运行 {min} 分 {sec} 秒, 预计还将运行 {remain_min} 分 {remain_sec} 秒{Style.RESET_ALL}')
-    elif tag == 1 and item_count != 0:  # Error JSONDecode 输出
-        print(f'{Fore.CYAN}[INFO] 当前为第 {retry_count} 次重试, 第 {pause_count} 次暂停, 已爬取 {item_count} 件商品, 爬取进度 {progress * 100:.2f} %{Style.RESET_ALL}')
+    elif tag == 1 and item_count != 0:  # Error 412 输出
+        print(f'{Fore.CYAN}[INFO] 当前为第 {pause_count} 次暂停, 已爬取 {item_count} 件商品, 爬取进度 {progress * 100:.2f} %{Style.RESET_ALL}') if retry_count == 0 else print(f'{Fore.CYAN}[INFO] 当前为第 {retry_count} 次重试, 第 {pause_count} 次暂停, 已爬取 {item_count} 件商品, 爬取进度 {progress * 100:.2f} %{Style.RESET_ALL}')
         print(f'{Fore.GREEN}[INFO] 程序已运行 {min} 分 {sec} 秒, 预计还将运行 {remain_min} 分 {remain_sec} 秒{Style.RESET_ALL}')
     elif tag == 2 and item_count != 0:  # KeyboardInterrupt 输出
         print(f'{Fore.CYAN}[INFO] 当前已爬取 {item_count} 件商品, 爬取进度 {progress * 100:.2f} %{Style.RESET_ALL}')
